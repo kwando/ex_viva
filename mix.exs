@@ -23,7 +23,8 @@ defmodule Viva.MixProject do
     [
       {:jason, ">= 0.0.0"},
       {:hackney, ">= 0.0.0"},
-      {:exsync, ">= 0.0.0"},
+      {:exsync, ">= 0.0.0", only: :dev},
+      {:mix_test_watch, "0.9.0", runtime: false, only: :dev}
     ]
   end
 end

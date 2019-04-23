@@ -29,6 +29,7 @@ defmodule HTTP.Request do
   def accept_json(request) do
     request
     |> put_header("Accept", "application/json")
+    |> add_response_handler(:decode_json)
   end
 
   def add_response_handler(%__MODULE__{} = req, handler) do

@@ -1,7 +1,7 @@
 defmodule HTTP do
   def request(request, opts \\ []) do
     request = preprocess_request(request, opts)
-    |> IO.inspect(label: "processed request")
+
     {:ok, status, headers, client} = :hackney.request(request.method, request.url, request.headers, request.body, request.options)
     {:ok, body} = :hackney.body(client)
 
@@ -22,6 +22,10 @@ defmodule HTTP do
   defp apply_transform({status, headers, body}, :decode_json) do
     {:ok, json} = Jason.decode(body)
     {status, headers, json}
+  end
+
+  defp apply_transform({status, headers, body}, module) when is_atom(module) do
+    module.handle_response({status, headers, body}, [])
   end
 
   defp normalize_headers(headers) do
