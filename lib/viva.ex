@@ -1,11 +1,25 @@
 defmodule Viva do
   @base_url "https://services.viva.sjofartsverket.se:8080"
+  @moduledoc """
+  This modules provides functions to fetch imformation from the Swedish Maritime Administration.
+  The data from the API is not interpreted in any way, it is just normalized and parsed
+  into appropriate Elixir datatypes.
+  """
 
+  @doc """
+  Returns a list of %Viva.Station{} structs.
+  """
   def get_stations(opts \\ []) do
     get_stations_request()
     |> request(opts)
   end
 
+  @doc """
+  Get observations for a particaluar station.
+
+  Station_id can be a number, a %Viva.Station{} struct or anything that implements
+  the Viva.StationIdentity protocol.
+  """
   def get_station(station_id, opts \\ []) do
     get_station_request(station_id, opts)
     |> request(opts)

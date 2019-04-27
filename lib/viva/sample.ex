@@ -4,6 +4,9 @@ defmodule Viva.StationSample do
     samples: [],
     requested_at: nil
   ]
+  @moduledoc """
+  Datatype for holding information that is returned from the API.
+  """
 
   defimpl Viva.StationIdentity, for: __MODULE__  do
     def station_id(%{station_id: station_id}), do: station_id
