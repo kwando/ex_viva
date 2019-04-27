@@ -1,4 +1,6 @@
 defmodule Viva do
+  @base_url "https://services.viva.sjofartsverket.se:8080"
+
   def get_stations(opts \\ []) do
     get_stations_request()
     |> request(opts)
@@ -10,7 +12,7 @@ defmodule Viva do
   end
 
   def get_stations_request() do
-    HTTP.Request.get("https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/")
+    HTTP.Request.get("/output/vivaoutputservice.svc/vivastation/")
     |> HTTP.Request.accept_json()
     |> HTTP.Request.add_response_handler(:normalize_headers)
     |> HTTP.Request.add_response_handler(Viva.Decoders.GetStationsResult)
@@ -19,7 +21,7 @@ defmodule Viva do
   def get_station_request(station_id, opts \\ []) do
     station_id = Viva.StationIdentity.station_id(station_id)
 
-    HTTP.Request.get("https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/#{station_id}")
+    HTTP.Request.get("/output/vivaoutputservice.svc/vivastation/#{station_id}")
     |> HTTP.Request.accept_json()
     |> HTTP.Request.add_response_handler(:normalize_headers)
     |> use_decoder(Viva.Decoders.GetSingleStationResult, get_opt(opts, :decode, true))
@@ -39,7 +41,7 @@ defmodule Viva do
 
   defp request(request, opts) do
     request
-    |> HTTP.request()
+    |> HTTP.request(base_url: @base_url)
     |> unwrap(get_opt(opts, :unwrap, true))
   end
 
