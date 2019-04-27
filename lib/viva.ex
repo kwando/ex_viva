@@ -9,16 +9,6 @@ defmodule Viva do
     |> request(opts)
   end
 
-  defp request(request, opts) do
-    request
-    |> HTTP.request()
-    |> unwrap(get_opt(opts, :unwrap, true))
-  end
-  defp unwrap({:ok, {200, _headers, body}}, true) do
-    {:ok, body}
-  end
-  defp unwrap(result, false), do: result
-
   def get_stations_request() do
     HTTP.Request.get("https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/")
     |> HTTP.Request.accept_json()
@@ -47,6 +37,12 @@ defmodule Viva do
     end
   end
 
+  defp request(request, opts) do
+    request
+    |> HTTP.request()
+    |> unwrap(get_opt(opts, :unwrap, true))
+  end
+
   defp get_opt(opts, key, default), do: Keyword.get(opts, key, default)
 
   defp use_decoder(request, decoder, true) do
@@ -54,4 +50,9 @@ defmodule Viva do
     |> HTTP.Request.add_response_handler(decoder)
   end
   defp use_decoder(request, _, _), do: request
+
+  defp unwrap({:ok, {200, _headers, body}}, true) do
+    {:ok, body}
+  end
+  defp unwrap(result, false), do: result
 end
