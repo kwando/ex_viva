@@ -1,4 +1,4 @@
-defmodule HTTP do
+defmodule ExViva.HTTP do
   def request(request, opts \\ []) do
     request = preprocess_request(request, opts)
 

@@ -1,6 +1,6 @@
 defmodule ExViva do
   @base_url "https://services.viva.sjofartsverket.se:8080"
-  alias ExViva.Decoders
+  alias ExViva.{Decoders, HTTP}
   @moduledoc """
   This modules provides functions to fetch imformation from the Swedish Maritime Administration.
   The data from the API is not interpreted in any way, it is just normalized and parsed

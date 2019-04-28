@@ -1,4 +1,4 @@
-defmodule HTTP.Request do
+defmodule ExViva.HTTP.Request do
   defstruct [
     method: :get,
     url: nil,
