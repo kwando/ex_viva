@@ -1,4 +1,4 @@
-defmodule Viva.Decoders.Sample do
+defmodule ExViva.Decoders.Sample do
   defmacrop v!(key) do
     quote do
       Map.fetch!(var!(sample), unquote(key))
@@ -9,7 +9,7 @@ defmodule Viva.Decoders.Sample do
     unit = v!("Unit")
     type = parse_type(v!("Type"), unit)
 
-    %Viva.Sample{
+    %ExViva.Sample{
       heading: v!("Heading"),
       unit: v!("Unit"),
       trend: v!("Trend"),

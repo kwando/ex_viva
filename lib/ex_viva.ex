@@ -1,5 +1,6 @@
-defmodule Viva do
+defmodule ExViva do
   @base_url "https://services.viva.sjofartsverket.se:8080"
+  alias ExViva.Decoders
   @moduledoc """
   This modules provides functions to fetch imformation from the Swedish Maritime Administration.
   The data from the API is not interpreted in any way, it is just normalized and parsed
@@ -7,7 +8,7 @@ defmodule Viva do
   """
 
   @doc """
-  Returns a list of %Viva.Station{} structs.
+  Returns a list of %ExViva.Station{} structs.
   """
   def get_stations(opts \\ []) do
     get_stations_request()
@@ -17,7 +18,7 @@ defmodule Viva do
   @doc """
   Get observations for a particaluar station.
 
-  Station_id can be a number, a %Viva.Station{} struct or anything that implements
+  Station_id can be a number, a %ExViva.Station{} struct or anything that implements
   the Viva.StationIdentity protocol.
   """
   def get_station(station_id, opts \\ []) do
@@ -29,16 +30,16 @@ defmodule Viva do
     HTTP.Request.get("/output/vivaoutputservice.svc/vivastation/")
     |> HTTP.Request.accept_json()
     |> HTTP.Request.add_response_handler(:normalize_headers)
-    |> HTTP.Request.add_response_handler(Viva.Decoders.GetStationsResult)
+    |> HTTP.Request.add_response_handler(Decoders.GetStationsResult)
   end
 
   def get_station_request(station_id, opts \\ []) do
-    station_id = Viva.StationIdentity.station_id(station_id)
+    station_id = ExViva.StationIdentity.station_id(station_id)
 
     HTTP.Request.get("/output/vivaoutputservice.svc/vivastation/#{station_id}")
     |> HTTP.Request.accept_json()
     |> HTTP.Request.add_response_handler(:normalize_headers)
-    |> use_decoder(Viva.Decoders.GetSingleStationResult, get_opt(opts, :decode, true))
+    |> use_decoder(Decoders.GetSingleStationResult, get_opt(opts, :decode, true))
   end
 
   def sample_all(opts \\ []) do

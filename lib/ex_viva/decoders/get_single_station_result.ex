@@ -1,11 +1,11 @@
-defmodule Viva.Decoders.GetSingleStationResult do
+defmodule ExViva.Decoders.GetSingleStationResult do
   def handle_response({status, headers, %{"GetSingleStationResult" => body = %{"Felmeddelande" => nil, "ID" => station_id, "Samples" => samples}}}, _opts) do
-    {status, headers, %Viva.StationSample{samples: map_samples(samples), station_id: station_id, requested_at: DateTime.utc_now()}}
+    {status, headers, %ExViva.StationSample{samples: map_samples(samples), station_id: station_id, requested_at: DateTime.utc_now()}}
   end
 
   defp map_samples(samples) do
     for sample <- samples do
-      Viva.Decoders.Sample.simple_decode(sample)
+      ExViva.Decoders.Sample.simple_decode(sample)
     end
   end
 end

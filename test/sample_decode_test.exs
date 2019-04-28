@@ -6,8 +6,7 @@ defmodule Viva.SampleDecoderTest do
 
     for %{"GetSingleStationResult" => %{"Samples" => samples}} <- samples do
       for sample <- samples do
-        assert %Viva.Sample{} = Viva.Decoders.Sample.simple_decode(sample)
-
+        assert %ExViva.Sample{} = ExViva.Decoders.Sample.simple_decode(sample)
       end
     end
   end

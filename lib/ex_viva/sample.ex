@@ -1,4 +1,4 @@
-defmodule Viva.StationSample do
+defmodule ExViva.StationSample do
   defstruct [
     station_id: nil,
     samples: [],
@@ -8,15 +8,15 @@ defmodule Viva.StationSample do
   Datatype for holding information that is returned from the API.
   """
 
-  defimpl Viva.StationIdentity, for: __MODULE__  do
+  defimpl ExViva.StationIdentity, for: __MODULE__  do
     def station_id(%{station_id: station_id}), do: station_id
   end
 end
 
-defmodule Viva.Sample do
+defmodule ExViva.Sample do
   defstruct [:calm, :heading, :message, :name, :quality, :trend, :station_id, :type, :unit, :updated_at, :value, :water_level_reference]
 
-  defimpl Viva.StationIdentity, for: __MODULE__  do
+  defimpl ExViva.StationIdentity, for: __MODULE__  do
     def station_id(%{station_id: station_id}), do: station_id
   end
 end
