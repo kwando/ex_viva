@@ -56,6 +56,7 @@ defmodule ExViva do
 
   defp request(request, opts) do
     request
+    |> HTTP.Request.put_header("User-Agent", "ExViva 0.0.1")
     |> HTTP.request(base_url: @base_url)
     |> unwrap(get_opt(opts, :unwrap, true))
   end
