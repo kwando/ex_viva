@@ -7,7 +7,9 @@ defmodule ExViva.MixProject do
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: "Weather observations from the Swedish Maritime Administration",
+      package: package()
     ]
   end
 
@@ -15,6 +17,15 @@ defmodule ExViva.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  def package() do
+    [
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Hannes Nevalainen"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/kwando/ex_viva"}
     ]
   end
 
