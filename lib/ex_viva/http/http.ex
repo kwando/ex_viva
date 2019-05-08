@@ -1,4 +1,5 @@
 defmodule ExViva.HTTP do
+  alias ExViva.HTTP
   def request(request, opts \\ []) do
     request = preprocess_request(request, opts)
 
