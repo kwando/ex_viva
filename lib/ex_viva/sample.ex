@@ -2,7 +2,8 @@ defmodule ExViva.StationSample do
   defstruct [
     station_id: nil,
     samples: [],
-    requested_at: nil
+    requested_at: nil,
+    error: nil
   ]
   @moduledoc """
   Datatype for holding information that is returned from the API.

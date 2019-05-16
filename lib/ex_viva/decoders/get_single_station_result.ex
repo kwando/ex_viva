@@ -4,12 +4,14 @@ defmodule ExViva.Decoders.GetSingleStationResult do
     {status, headers, decoded_body}
   end
 
-  def decode(%{"GetSingleStationResult" => %{"Felmeddelande" => nil, "ID" => station_id, "Samples" => samples}}) do
-    {:ok, %ExViva.StationSample{samples: map_samples(samples), station_id: station_id, requested_at: DateTime.utc_now()}}
-  end
-
-  def decode(%{"GetSingleStationResult" => %{"Felmeddelande" => error}}) do
-    {:error, {:station_error, error}}
+  def decode(%{"GetSingleStationResult" => %{"Felmeddelande" => error, "ID" => station_id, "Samples" => samples}}) do
+    sample =  %ExViva.StationSample{
+      samples: map_samples(samples),
+      station_id: station_id,
+      requested_at: DateTime.utc_now(),
+      error: error
+    }
+    {:ok, sample}
   end
 
   defp map_samples(samples) do
