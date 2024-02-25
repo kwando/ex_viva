@@ -1,8 +1,4 @@
 defmodule ExViva.Decoders.GetStationsResult do
-  def handle_response({status, headers, %{"GetStationsResult" => %{"Felmeddelande" => nil, "Stations" => stations}}}, _opts) do
-    {status, headers, Enum.map(stations, &map_station/1)}
-  end
-
   defp map_station(station) do
     %ExViva.Station{
       id: station["ID"],
@@ -10,5 +6,20 @@ defmodule ExViva.Decoders.GetStationsResult do
       longitude: station["Lon"],
       name: station["Name"]
     }
+  end
+
+  def decode({request, response}) do
+    case response do
+      %{status: 200} ->
+        {request,
+         %{
+           response
+           | body: decode_body(response.body)
+         }}
+    end
+  end
+
+  defp decode_body(%{"GetStationsResult" => %{"Felmeddelande" => nil, "Stations" => stations}}) do
+    Enum.map(stations, &map_station/1)
   end
 end

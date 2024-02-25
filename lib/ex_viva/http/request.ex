@@ -1,12 +1,10 @@
 defmodule ExViva.HTTP.Request do
-  defstruct [
-    method: :get,
-    url: nil,
-    headers: [],
-    body: "",
-    options: [],
-    response_handlers: []
-  ]
+  defstruct method: :get,
+            url: nil,
+            headers: [],
+            body: "",
+            options: [],
+            response_handlers: []
 
   def get(url) do
     %__MODULE__{url: url, method: :get}
@@ -17,11 +15,12 @@ defmodule ExViva.HTTP.Request do
   end
 
   def put_header(%__MODULE__{headers: headers} = req, header, value) do
-    %{ req | headers: [{header, value} | headers] }
+    %{req | headers: [{header, value} | headers]}
   end
 
   def basic_auth(request, username, password) do
     credentials = Base.encode64("#{username}:#{password}")
+
     request
     |> put_header("Authorization", "Basic #{credentials}")
   end
@@ -33,7 +32,7 @@ defmodule ExViva.HTTP.Request do
   end
 
   def add_response_handler(%__MODULE__{} = req, handler) do
-    %{ req | response_handlers: [ handler | req.response_handlers] }
+    %{req | response_handlers: [handler | req.response_handlers]}
   end
 
   def method(%__MODULE__{method: method}) do
@@ -41,6 +40,6 @@ defmodule ExViva.HTTP.Request do
   end
 
   def method(%__MODULE__{} = req, method) do
-    %{ req | method: method }
+    %{req | method: method}
   end
 end
