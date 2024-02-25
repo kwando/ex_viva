@@ -99,7 +99,7 @@ defmodule ExViva.Decoders.Sample do
 
   defp parse_value(value, "cm"), do: single_float(value)
 
-  defp parse_value(value, unit) when unit in ["‰", "%", "kg/m³", "°C", "mbar"],
+  defp parse_value(value, unit) when unit in ["‰", "%", "kg/m³", "°C", "mbar", "ml/l"],
     do: single_float(value)
 
   defp parse_value(">" <> value, "m") do
@@ -115,6 +115,7 @@ defmodule ExViva.Decoders.Sample do
   defp parse_type("water", "‰"), do: :salinity
   defp parse_type("water", "kg/m³"), do: :water_density
   defp parse_type("water", "m³/s"), do: :water_flow
+  defp parse_type("water", "ml/l"), do: :concentration
   defp parse_type("pressure", "mbar"), do: :air_pressure
   defp parse_type("air", "%"), do: :humidity
   defp parse_type("airtemp", "°C"), do: :temperature
