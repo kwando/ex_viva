@@ -1,6 +1,6 @@
 defmodule ExViva do
   @base_url "https://services.viva.sjofartsverket.se:8080"
-  alias ExViva.{Decoders}
+  alias ExViva.{Decoders, Result}
 
   @moduledoc """
   This modules provides functions to fetch imformation from the Swedish Maritime Administration.
@@ -30,6 +30,8 @@ defmodule ExViva do
   the Viva.StationIdentity protocol.
   """
   def get_station(station_id) do
+    station_id = ExViva.StationIdentity.station_id(station_id)
+
     base_request()
     |> Req.Request.append_response_steps(decode_body: &Decoders.GetSingleStationResult.decode/1)
     |> Req.get!(url: "/output/vivaoutputservice.svc/vivastation/#{station_id}")
@@ -42,9 +44,9 @@ defmodule ExViva do
         stations
         |> Task.async_stream(&get_station(&1))
         |> Stream.map(&elem(&1, 1))
-        |> Enum.split_with(fn {:ok, _result} -> true end)
+        |> Enum.split_with(&Result.ok?/1)
 
-      {:ok, success |> Enum.flat_map(fn {:ok, result} -> result.samples end), errors}
+      {:ok, success |> Enum.flat_map(&Result.unwrap(&1).samples), errors}
     end
   end
 end

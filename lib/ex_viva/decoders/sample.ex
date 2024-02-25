@@ -30,12 +30,8 @@ defmodule ExViva.Decoders.Sample do
     %{result | message: message}
   end
 
-  defp with_quality(result, %{"Quality" => "Ok"}) do
-    %{result | quality: "ok"}
-  end
-
   defp with_quality(result, %{"Quality" => quality}) do
-    %{result | quality: quality}
+    %{result | quality: parse_quality(quality)}
   end
 
   defp with_timestamp(result, %{"Updated" => updated}) do
@@ -99,7 +95,7 @@ defmodule ExViva.Decoders.Sample do
 
   defp parse_value(value, "cm"), do: single_float(value)
 
-  defp parse_value(value, unit) when unit in ["‰", "%", "kg/m³", "°C", "mbar", "ml/l"],
+  defp parse_value(value, unit) when unit in ["‰", "%", "kg/m³", "°C", "mbar", "ml/l", "hPa"],
     do: single_float(value)
 
   defp parse_value(">" <> value, "m") do
@@ -117,6 +113,7 @@ defmodule ExViva.Decoders.Sample do
   defp parse_type("water", "m³/s"), do: :water_flow
   defp parse_type("water", "ml/l"), do: :concentration
   defp parse_type("pressure", "mbar"), do: :air_pressure
+  defp parse_type("pressure", "hPa"), do: :air_pressure
   defp parse_type("air", "%"), do: :humidity
   defp parse_type("airtemp", "°C"), do: :temperature
   defp parse_type("sight", "m"), do: :sight
@@ -124,4 +121,10 @@ defmodule ExViva.Decoders.Sample do
   defp parse_type("wave", "s"), do: :wave_period
   defp parse_type("rain", "mm/h"), do: :rain
   defp parse_type("rain", "#/cm2/h"), do: :hail_intensity
+  defp parse_type("dewpointtemp", "°C"), do: :dewpoint_temperature
+
+  defp parse_quality("Ok"), do: :ok
+  defp parse_quality("Gammalt värde"), do: :old_value
+  defp parse_quality("Kvalitetsfel"), do: :quality_error
+  defp parse_quality(quality), do: {:unknown, quality}
 end
